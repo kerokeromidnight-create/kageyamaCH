@@ -24,9 +24,9 @@ const INDEX_HTML    = path.join(OUT_DIR, 'index.html');
 const ARTICLES_HTML = path.join(OUT_DIR, 'articles.html');
 
 const MEMBER_DISPLAY = {
-  masashi:  'まさし',
-  masaharu: 'まさはる',
-  masaaki:  'まさあき',
+  masashi:  'カレハ',
+  masaharu: 'ルハさま',
+  masaaki:  'キアさま',
 };
 
 const MEMBER_BIO = {
@@ -116,12 +116,6 @@ function inlineFormat(str) {
 
 // ── 日付フォーマット ─────────────────────────────────────────────────────
 
-function fmtDateLong(iso) {
-  // "2024-12-15" → "2024年12月15日"
-  const [y, m, d] = iso.split('-');
-  return `${y}年${Number(m)}月${Number(d)}日`;
-}
-
 function fmtDateDot(iso) {
   // "2024-12-15" → "2024.12.15"
   const [y, m, d] = iso.split('-');
@@ -206,43 +200,29 @@ function buildArticleHtml(meta, body, allArticles) {
   <main class="main-content">
     <div class="container">
 
-      <nav class="breadcrumb" aria-label="パンくずリスト">
-        <a href="index.html">トップ</a>
-        <span class="breadcrumb__sep">/</span>
-        <a href="articles.html">記事一覧</a>
-        <span class="breadcrumb__sep">/</span>
-        <span>${escape(meta.title)}</span>
-      </nav>
-
       <header class="article-header">
         <div class="card__tag">${escape(meta.tag)}</div>
         <h1 class="article__title">${escape(meta.title)}</h1>
-        <div class="article-meta">
-          <div class="article-meta__item">
-            <span class="article-meta__label">投稿日</span>
-            <time datetime="${meta.date}"><strong>${fmtDateLong(meta.date)}</strong></time>
-          </div>
-          <div class="article-meta__item">
-            <span class="article-meta__label">執筆者</span>
-            <img class="avatar-img sm" src="images/${author}.png" alt="${displayName}">
-            <strong>${displayName}</strong>
-          </div>
-        </div>
       </header>
+
+      <div class="article-byline ${memberClass}">
+        <div class="avatar-circle sm ${memberClass}"><img src="images/${author}.png" alt="${displayName}"></div>
+        <span class="article-byline__name">${displayName}</span>
+        <time class="article-byline__date" datetime="${meta.date}">${fmtDateDot(meta.date)}</time>
+      </div>
 
       <div class="article-body">
         ${body}
       </div>
 
       <section class="screenshots">
-        <h2 class="section-title">スクリーンショット</h2>
         <div class="screenshots__grid">
           ${ss1}
         </div>
       </section>
 
       <div class="author-card ${memberClass}">
-        <img class="avatar-img lg" src="images/${author}.png" alt="${displayName}">
+        <div class="avatar-circle lg ${memberClass}"><img src="images/${author}.png" alt="${displayName}"></div>
         <div class="author-card__info">
           <div class="author-card__handle">${displayName}</div>
           <p class="author-card__bio">${escape(bio)}</p>

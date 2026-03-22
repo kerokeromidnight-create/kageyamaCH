@@ -2,7 +2,7 @@
    masaCH — style.css  (ライトテーマ)
 =================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=DotGothic16&display=swap');
 
 /* --- Variables --- */
 :root {
@@ -17,7 +17,6 @@
   --accent:      #6d28d9;
   --accent2:     #0e7490;
 
-  /* メンバーカラー（ライト背景で読めるよう暗め） */
   --color-masaharu: #15803d;
   --color-masaaki:  #c2410c;
   --color-masashi:  #1d4ed8;
@@ -46,12 +45,59 @@
   --radius-lg: 18px;
 }
 
+/* ===================================================
+   ANIMATIONS
+=================================================== */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes heroGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+@keyframes eyebrowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.3); }
+  50%       { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
+}
+
+@keyframes neonFlicker {
+  0%, 90%, 100% {
+    text-shadow:
+      0 0 6px rgba(255,255,255,0.9),
+      0 0 14px rgba(0,212,255,0.9),
+      0 0 30px rgba(0,180,255,0.65),
+      0 0 60px rgba(0,140,255,0.4),
+      0 0 100px rgba(0,100,200,0.2);
+    opacity: 1;
+  }
+  92% { opacity: 0.82; }
+  94% { opacity: 1; }
+  96% { opacity: 0.88; }
+  98% { opacity: 1; }
+}
+
+@keyframes orb {
+  0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+  50%       { transform: translateX(-50%) translateY(-20px) scale(1.05); }
+}
+
 /* --- Reset --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
+  background-image: radial-gradient(circle, rgba(109,40,217,0.09) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: var(--text);
   font-family: var(--font-body);
   font-size: var(--fs-base);
@@ -60,7 +106,6 @@ body {
   overflow-x: hidden;
 }
 
-/* 淡いパープルのグロー — コンテンツエリアのみ */
 body::before {
   content: '';
   position: fixed;
@@ -86,7 +131,6 @@ a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
 a:hover { opacity: 0.75; }
 ul, ol { list-style: none; }
 
-/* Layer above body glows */
 .page-wrapper { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
 .main-content { flex: 1; padding: var(--space-12) 0; }
 .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-6); }
@@ -97,35 +141,77 @@ ul, ol { list-style: none; }
 .member--masashi  { --member-color: var(--color-masashi);  --member-bg: rgba(29,78,216,0.08); }
 
 /* ===================================================
-   AVATAR — 画像ベース
+   AVATAR — ラッパー方式（overflow:hidden でズーム可能）
 =================================================== */
 
-.avatar-img {
+/* ラッパー div */
+.avatar-circle {
   border-radius: 50%;
-  object-fit: cover;
-  object-position: top;
+  overflow: hidden;
   flex-shrink: 0;
   display: block;
 }
+.avatar-circle.sm { width: 34px;  height: 34px; }
+.avatar-circle.md { width: 64px;  height: 64px; }
+.avatar-circle.lg { width: 120px; height: 120px; }
 
+.avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.3s;
+}
+
+/* まさあき・まさはるは顔が小さいので拡大 */
+.member--masaaki .avatar-circle img,
+.avatar-circle.member--masaaki img {
+  transform: scale(1.15);
+  transform-origin: top center;
+}
+.member--masaharu .avatar-circle img,
+.avatar-circle.member--masaharu img {
+  transform: scale(1.2);
+  transform-origin: top center;
+}
+
+/* ボーダー・グロー（ネオン風） */
+.member--masaharu .avatar-circle,
+.avatar-circle.member--masaharu {
+  border: 2px solid #4ade80;
+  box-shadow: 0 0 6px #4ade80, 0 0 14px rgba(74,222,128,0.55), inset 0 0 6px rgba(74,222,128,0.15);
+}
+.member--masaaki .avatar-circle,
+.avatar-circle.member--masaaki {
+  border: 2px solid #fb923c;
+  box-shadow: 0 0 6px #fb923c, 0 0 14px rgba(251,146,60,0.55), inset 0 0 6px rgba(251,146,60,0.15);
+}
+.member--masashi .avatar-circle,
+.avatar-circle.member--masashi {
+  border: 2px solid #60a5fa;
+  box-shadow: 0 0 6px #60a5fa, 0 0 14px rgba(96,165,250,0.55), inset 0 0 6px rgba(96,165,250,0.15);
+}
+
+/* 旧 avatar-img との後方互換（member-card__photo 内などで引き続き使用） */
+.avatar-img {
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  flex-shrink: 0;
+  display: block;
+}
 .avatar-img.sm  { width: 34px;  height: 34px; }
 .avatar-img.md  { width: 56px;  height: 56px; }
 .avatar-img.lg  { width: 120px; height: 120px; }
-.avatar-img.xl  { width: 160px; height: 160px; }
-
-.member--masaharu .avatar-img { border: 2px solid var(--color-masaharu); box-shadow: 0 0 8px rgba(21,128,61,0.22); }
-.member--masaaki  .avatar-img { border: 2px solid var(--color-masaaki);  box-shadow: 0 0 8px rgba(194,65,12,0.22); }
-.member--masashi  .avatar-img { border: 2px solid var(--color-masashi);  box-shadow: 0 0 8px rgba(29,78,216,0.22); }
 
 /* ===================================================
    HEADER
 =================================================== */
 
 .site-header {
-  background: rgba(255,255,255,0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #020c1a 0%, #051628 60%, #030f20 100%);
+  border-bottom: 1px solid rgba(0,180,255,0.25);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -145,10 +231,11 @@ ul, ol { list-style: none; }
   font-family: var(--font-heading);
   font-size: var(--fs-xl);
   font-weight: 800;
-  background: linear-gradient(90deg, #6d28d9 0%, #0e7490 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #fff;
+  text-shadow:
+    0 0 6px #fff,
+    0 0 14px #00d4ff,
+    0 0 28px #00aaff;
   letter-spacing: 0.04em;
 }
 
@@ -158,16 +245,15 @@ ul, ol { list-style: none; }
   font-family: var(--font-heading);
   font-size: var(--fs-sm);
   font-weight: 600;
-  color: var(--muted);
+  color: rgba(255,255,255,0.7);
   padding: var(--space-2) var(--space-4);
   border-radius: 8px;
   transition: color 0.2s, background 0.2s;
 }
 
-.main-nav a:hover { color: var(--text); background: rgba(109,40,217,0.07); opacity: 1; }
-.main-nav a.active { color: var(--accent); }
+.main-nav a:hover { color: #fff; background: rgba(0,180,255,0.15); opacity: 1; }
+.main-nav a.active { color: #00d4ff; }
 
-/* Hamburger */
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -182,7 +268,7 @@ ul, ol { list-style: none; }
   display: block;
   width: 24px;
   height: 2px;
-  background: var(--text);
+  background: rgba(255,255,255,0.85);
   border-radius: 2px;
   transition: transform 0.3s, opacity 0.3s;
 }
@@ -199,8 +285,8 @@ ul, ol { list-style: none; }
     top: 64px; left: 0; right: 0;
     flex-direction: column;
     gap: 0;
-    background: rgba(255,255,255,0.97);
-    border-bottom: 1px solid var(--border);
+    background: #020c1a;
+    border-bottom: 1px solid rgba(0,180,255,0.25);
     padding: var(--space-4) 0;
   }
   .main-nav.nav--open { display: flex; }
@@ -208,27 +294,52 @@ ul, ol { list-style: none; }
 }
 
 /* ===================================================
-   HERO — 3shot.png + タイトル + メンバーチップ
+   HERO — 大型・アニメーショングラデーション
 =================================================== */
 
 .hero {
-  padding: 3.5rem var(--space-6) 3rem;
+  padding: 5rem var(--space-6) 4.5rem;
   text-align: center;
   position: relative;
-  background: linear-gradient(175deg, #ede9fe 0%, #f0eeff 50%, #f5f3ff 100%);
-  border-bottom: 1px solid rgba(109,40,217,0.18);
+  background: linear-gradient(-45deg, #020c1a, #051628, #081e38, #030f20);
+  background-size: 400% 400%;
+  animation: heroGradient 10s ease infinite;
+  border-bottom: 1px solid rgba(0,180,255,0.3);
+  overflow: hidden;
 }
 
-/* Hero専用グロー */
+/* 浮遊するデコレーション orb */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 15%;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(0,180,255,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: orb 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; right: 10%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(0,120,220,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: orb 9s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+
 .hero-glow {
   position: absolute;
   top: -15%; left: 50%;
   transform: translateX(-50%);
   width: 1100px; height: 550px;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 20%, rgba(109,40,217,0.13) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 35% at 30% 60%, rgba(14,116,144,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 35% at 70% 60%, rgba(124,58,237,0.06) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 50% at 50% 20%, rgba(0,180,255,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 30% 60%, rgba(0,120,220,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 70% 60%, rgba(0,200,255,0.05) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -245,25 +356,24 @@ ul, ol { list-style: none; }
   font-size: var(--fs-xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid rgba(109,40,217,0.3);
-  background: rgba(109,40,217,0.07);
+  color: rgba(0,212,255,0.95);
+  border: 1px solid rgba(0,212,255,0.45);
+  background: rgba(0,180,255,0.08);
   padding: 0.3rem 1rem;
   border-radius: 999px;
   margin-bottom: 1.5rem;
+  animation: eyebrowPulse 3s ease-in-out infinite;
 }
 
 .hero__title {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-size: clamp(3.2rem, 10vw, 7rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.04em;
   line-height: 1;
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, #6d28d9 0%, #1e1640 40%, #0e7490 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #fff;
+  animation: floatY 5s ease-in-out infinite, neonFlicker 6s ease-in-out infinite;
 }
 
 .hero__tagline {
@@ -271,75 +381,77 @@ ul, ol { list-style: none; }
   font-size: var(--fs-base);
   color: var(--muted);
   letter-spacing: 0.08em;
-  margin-bottom: 2rem;
+  margin-bottom: 0.75rem;
 }
 
-/* Group photo */
+/* Group photo — 透過PNG対応、キャラ全体を表示 */
 .hero-photo {
   width: 100%;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid rgba(109,40,217,0.18);
-  box-shadow:
-    0 0 40px rgba(109,40,217,0.1),
-    0 8px 40px rgba(0,0,0,0.08);
   margin-bottom: 2rem;
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .hero-photo img {
-  width: 100%;
   display: block;
   max-height: 480px;
-  object-fit: cover;
-  object-position: center top;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 24px rgba(0,180,255,0.55)) drop-shadow(0 0 60px rgba(0,140,255,0.25));
+  -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
 }
 
-/* Bottom fade on photo */
-.hero-photo::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 90px;
-  background: linear-gradient(to top, #f5f3ff, transparent);
-  pointer-events: none;
-}
-
-/* Member chips */
-.hero__members {
+/* Member names below hero photo */
+.hero__member-names {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 2.5rem;
   flex-wrap: wrap;
+  margin-top: 0.25rem;
 }
 
-.hero__member-chip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-heading);
+.hero__member-name {
+  font-family: 'DotGothic16', var(--font-body);
   font-size: var(--fs-sm);
-  font-weight: 700;
-  color: var(--text);
-  transition: transform 0.2s, opacity 0.2s;
+  -webkit-text-stroke: 0.4px currentColor;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 1.1rem;
+  border-radius: 999px;
+  border: none;
+  text-decoration: none;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(4px);
+  transition: background 0.2s, text-shadow 0.2s;
 }
 
-.hero__member-chip:hover {
-  transform: translateY(-3px);
-  opacity: 1;
-  color: var(--member-color, var(--accent));
+.hero__member-name:hover {
+  background: rgba(255,255,255,0.13);
 }
 
-.hero__member-chip .avatar-img.md {
-  width: 64px;
-  height: 64px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  transition: box-shadow 0.2s;
+.hero__member-name.member--masashi  {
+  color: rgba(147,197,253,0.9);
+  text-shadow: 0 0 8px rgba(96,165,250,0.5);
+  border-bottom: 1px solid rgba(96,165,250,0.6);
+  border-right: 1px solid rgba(96,165,250,0.4);
+  box-shadow: 3px 3px 8px rgba(96,165,250,0.4), 5px 5px 18px rgba(96,165,250,0.15);
 }
-
-.hero__member-chip:hover .avatar-img.md {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+.hero__member-name.member--masaaki  {
+  color: rgba(253,186,116,0.9);
+  text-shadow: 0 0 8px rgba(251,146,60,0.5);
+  border-bottom: 1px solid rgba(251,146,60,0.6);
+  border-right: 1px solid rgba(251,146,60,0.4);
+  box-shadow: 3px 3px 8px rgba(251,146,60,0.4), 5px 5px 18px rgba(251,146,60,0.15);
+}
+.hero__member-name.member--masaharu {
+  color: rgba(134,239,172,0.9);
+  text-shadow: 0 0 8px rgba(74,222,128,0.5);
+  border-bottom: 1px solid rgba(74,222,128,0.6);
+  border-right: 1px solid rgba(74,222,128,0.4);
+  box-shadow: 3px 3px 8px rgba(74,222,128,0.4), 5px 5px 18px rgba(74,222,128,0.15);
 }
 
 /* ===================================================
@@ -360,6 +472,18 @@ ul, ol { list-style: none; }
   font-size: var(--fs-xl);
   font-weight: 800;
   color: var(--text);
+  position: relative;
+  padding-bottom: 0.4rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 2.5rem;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
 }
 
 .view-all-link {
@@ -403,12 +527,30 @@ ul, ol { list-style: none; }
   flex-direction: column;
   box-shadow: 0 2px 12px rgba(109,40,217,0.06);
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  animation: fadeInUp 0.5s ease both;
 }
+
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.25s; }
+.card:nth-child(4) { animation-delay: 0.35s; }
+
+/* 上部カラーストライプ */
+.card::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: var(--member-color, var(--accent));
+  opacity: 0.5;
+  transition: opacity 0.25s;
+  flex-shrink: 0;
+}
+.card:hover::before { opacity: 1; }
 
 .card:hover {
   border-color: rgba(109,40,217,0.3);
   box-shadow: 0 8px 32px rgba(109,40,217,0.12);
-  transform: translateY(-4px);
+  transform: translateY(-5px);
 }
 
 .card:hover.member--masaharu { border-color: rgba(21,128,61,0.4); box-shadow: 0 8px 32px rgba(21,128,61,0.1); }
@@ -438,7 +580,9 @@ ul, ol { list-style: none; }
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
+  transition: transform 0.4s;
 }
+.card:hover .card__image img { transform: scale(1.04); }
 
 /* Card body */
 .card__body {
@@ -555,7 +699,12 @@ ul, ol { list-style: none; }
   flex-direction: column;
   text-align: center;
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  animation: fadeInUp 0.5s ease both;
 }
+
+.member-card:nth-child(1) { animation-delay: 0.05s; }
+.member-card:nth-child(2) { animation-delay: 0.18s; }
+.member-card:nth-child(3) { animation-delay: 0.31s; }
 
 .member-card:hover {
   border-color: var(--member-color);
@@ -563,7 +712,6 @@ ul, ol { list-style: none; }
   transform: translateY(-4px);
 }
 
-/* Full-width photo at top of member card */
 .member-card__photo {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -575,13 +723,11 @@ ul, ol { list-style: none; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: top center;
   transition: transform 0.4s;
 }
 
-.member-card:hover .member-card__photo img {
-  transform: scale(1.03);
-}
+.member-card:hover .member-card__photo img { transform: scale(1.04); }
 
 .member-card__body {
   padding: var(--space-6) var(--space-5);
@@ -693,10 +839,10 @@ ul, ol { list-style: none; }
   border-radius: 999px;
   cursor: pointer;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.15s;
 }
 
-.filter-btn:hover { color: var(--text); border-color: var(--border-h); }
+.filter-btn:hover { color: var(--text); border-color: var(--border-h); transform: translateY(-1px); }
 
 .filter-btn.is-active {
   color: var(--filter-color, var(--accent));
@@ -711,24 +857,10 @@ ul, ol { list-style: none; }
 .card.is-hidden { display: none; }
 
 /* ===================================================
-   ARTICLE PAGE
+   ARTICLE PAGE — シンプル構成（タイトル＋本文）
 =================================================== */
 
-.breadcrumb {
-  font-size: var(--fs-sm);
-  color: var(--muted);
-  margin-bottom: var(--space-8);
-  display: flex;
-  gap: var(--space-2);
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.breadcrumb a { color: var(--muted); }
-.breadcrumb a:hover { color: var(--text); opacity: 1; }
-.breadcrumb__sep { opacity: 0.3; }
-
-.article-header { margin-bottom: var(--space-8); }
+.article-header { margin-bottom: var(--space-6); }
 .article-header .card__tag { margin-bottom: var(--space-4); font-size: var(--fs-sm); }
 
 .article__title {
@@ -737,33 +869,35 @@ ul, ol { list-style: none; }
   font-weight: 800;
   color: var(--text);
   line-height: 1.3;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
 }
 
-.article-meta {
+/* 投稿者バイライン（シンプル一行） */
+.article-byline {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
-  flex-wrap: wrap;
-  padding: var(--space-4) var(--space-6);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--member-color, var(--accent));
-  border-radius: var(--radius);
-  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
-}
-
-.article-meta__item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   font-size: var(--fs-sm);
   color: var(--muted);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
 }
 
-.article-meta__item strong { color: var(--member-color, var(--accent)); font-weight: 700; }
-.article-meta__label { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--muted); }
+.article-byline .avatar-circle { flex-shrink: 0; }
 
+.article-byline__name {
+  font-weight: 700;
+  color: var(--member-color, var(--accent));
+}
+
+.article-byline__date {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  margin-left: auto;
+}
+
+/* 本文 */
 .article-body {
   font-size: var(--fs-base);
   line-height: 1.9;
@@ -807,21 +941,20 @@ ul, ol { list-style: none; }
   margin-top: var(--space-4);
 }
 
-/* Screenshots */
-.screenshots { margin: var(--space-12) 0; }
-
-.section-title {
-  font-family: var(--font-heading);
-  font-size: var(--fs-xl);
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: var(--space-6);
-}
+/* スクリーンショット（1枚） */
+.screenshots { margin: var(--space-10) 0 var(--space-8); }
 
 .screenshots__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--space-4);
+  display: block;
+}
+
+.screenshots__grid img {
+  width: 100%;
+  max-height: 480px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
 .screenshot-placeholder {
@@ -836,17 +969,6 @@ ul, ol { list-style: none; }
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
   letter-spacing: 0.1em;
-  transition: border-color 0.2s;
-}
-
-.screenshot-placeholder:hover { border-color: var(--member-color, var(--accent)); }
-
-.screenshots__grid img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
 }
 
 /* Author card */
@@ -858,7 +980,7 @@ ul, ol { list-style: none; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  margin: var(--space-12) 0;
+  margin: var(--space-10) 0;
   box-shadow: 0 2px 16px rgba(109,40,217,0.07);
 }
 

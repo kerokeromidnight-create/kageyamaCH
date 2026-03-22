@@ -25,29 +25,16 @@
   <main class="main-content">
     <div class="container">
 
-      <nav class="breadcrumb" aria-label="パンくずリスト">
-        <a href="index.html">トップ</a>
-        <span class="breadcrumb__sep">/</span>
-        <a href="articles.html">記事一覧</a>
-        <span class="breadcrumb__sep">/</span>
-        <span>フォートナイトで初めてビクロイとった！！</span>
-      </nav>
-
       <header class="article-header">
         <div class="card__tag">アクション</div>
         <h1 class="article__title">フォートナイトで初めてビクロイとった！！</h1>
-        <div class="article-meta">
-          <div class="article-meta__item">
-            <span class="article-meta__label">投稿日</span>
-            <time datetime="2025-01-20"><strong>2025年1月20日</strong></time>
-          </div>
-          <div class="article-meta__item">
-            <span class="article-meta__label">執筆者</span>
-            <img class="avatar-img sm" src="images/masaaki.png" alt="まさあき">
-            <strong>まさあき</strong>
-          </div>
-        </div>
       </header>
+
+      <div class="article-byline member--masaaki">
+        <div class="avatar-circle sm member--masaaki"><img src="images/masaaki.png" alt="キアさま"></div>
+        <span class="article-byline__name">キアさま</span>
+        <time class="article-byline__date" datetime="2025-01-20">2025.01.20</time>
+      </div>
 
       <div class="article-body">
         <p>やっっっったーーー！！ビクロイ！！はじめてのビクロイ！！うれしすぎてさけんだ！！</p>
@@ -59,16 +46,15 @@
       </div>
 
       <section class="screenshots">
-        <h2 class="section-title">スクリーンショット</h2>
         <div class="screenshots__grid">
           <div class="screenshot-placeholder"><span>📸 スクショ</span></div>
         </div>
       </section>
 
       <div class="author-card member--masaaki">
-        <img class="avatar-img lg" src="images/masaaki.png" alt="まさあき">
+        <div class="avatar-circle lg member--masaaki"><img src="images/masaaki.png" alt="キアさま"></div>
         <div class="author-card__info">
-          <div class="author-card__handle">まさあき</div>
+          <div class="author-card__handle">キアさま</div>
           <p class="author-card__bio">10歳。フォートナイトとスプラトゥーンが得意で、動きの速さは年齢を感じさせない。負けるとすぐイライラするが、次の日にはケロッとしている。</p>
           <a href="members.html" class="author-card__link">プロフィールを見る →</a>
         </div>
@@ -79,10 +65,10 @@
           <span class="article-nav__label">← 前の記事</span>
           <span class="article-nav__title">スト6で初段に上がった話、あと負けた話</span>
         </a>
-        <div class="article-nav__item">
+        <a href="article-004.html" class="article-nav__item article-nav__item--next">
           <span class="article-nav__label">次の記事 →</span>
-          <span class="article-nav__title" style="color: var(--muted);">なし</span>
-        </div>
+          <span class="article-nav__title">いいキャラが手に入った</span>
+        </a>
       </nav>
 
     </div>
