@@ -291,6 +291,31 @@ ul, ol { list-style: none; }
   }
   .main-nav.nav--open { display: flex; }
   .main-nav a { padding: var(--space-3) var(--space-6); border-radius: 0; }
+
+  /* Hero — スマホ対応 */
+  .hero {
+    padding: 3.5rem var(--space-4) 3rem;
+  }
+
+  .hero-photo img {
+    max-height: none;
+    width: 100%;
+  }
+
+  .hero__member-names {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .hero__member-name {
+    justify-content: center;
+  }
+
+  /* モバイル表示順: キアさま → ルハさま → カレハ */
+  .hero__member-name.member--masaaki  { order: 1; }
+  .hero__member-name.member--masaharu { order: 2; }
+  .hero__member-name.member--masashi  { order: 3; }
 }
 
 /* ===================================================
@@ -413,45 +438,48 @@ ul, ol { list-style: none; }
 }
 
 .hero__member-name {
-  font-family: 'DotGothic16', var(--font-body);
-  font-size: var(--fs-sm);
-  -webkit-text-stroke: 0.4px currentColor;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 0.3rem 1.1rem;
-  border-radius: 999px;
-  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
   text-decoration: none;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(4px);
-  transition: background 0.2s, text-shadow 0.2s;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: opacity 0.2s, transform 0.2s;
 }
 
 .hero__member-name:hover {
-  background: rgba(255,255,255,0.13);
+  opacity: 0.8;
+  transform: translateY(-2px);
 }
 
-.hero__member-name.member--masashi  {
+.hero__member-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.hero__member-name span {
+  font-family: 'DotGothic16', var(--font-body);
+  font-size: var(--fs-sm);
+  -webkit-text-stroke: 0.4px currentColor;
+  letter-spacing: 0.18em;
+  padding-bottom: 0.15rem;
+}
+
+.hero__member-name.member--masashi span {
   color: rgba(147,197,253,0.9);
-  text-shadow: 0 0 8px rgba(96,165,250,0.5);
-  border-bottom: 1px solid rgba(96,165,250,0.6);
-  border-right: 1px solid rgba(96,165,250,0.4);
-  box-shadow: 3px 3px 8px rgba(96,165,250,0.4), 5px 5px 18px rgba(96,165,250,0.15);
+  border-bottom: 1px solid rgba(96,165,250,0.35);
 }
-.hero__member-name.member--masaaki  {
+.hero__member-name.member--masaaki span {
   color: rgba(253,186,116,0.9);
-  text-shadow: 0 0 8px rgba(251,146,60,0.5);
-  border-bottom: 1px solid rgba(251,146,60,0.6);
-  border-right: 1px solid rgba(251,146,60,0.4);
-  box-shadow: 3px 3px 8px rgba(251,146,60,0.4), 5px 5px 18px rgba(251,146,60,0.15);
+  border-bottom: 1px solid rgba(251,146,60,0.35);
 }
-.hero__member-name.member--masaharu {
+.hero__member-name.member--masaharu span {
   color: rgba(134,239,172,0.9);
-  text-shadow: 0 0 8px rgba(74,222,128,0.5);
-  border-bottom: 1px solid rgba(74,222,128,0.6);
-  border-right: 1px solid rgba(74,222,128,0.4);
-  box-shadow: 3px 3px 8px rgba(74,222,128,0.4), 5px 5px 18px rgba(74,222,128,0.15);
+  border-bottom: 1px solid rgba(74,222,128,0.35);
 }
 
 /* ===================================================
